@@ -1,23 +1,31 @@
 package camelinaction;
 
-import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "order")
+@XmlAccessorType(XmlAccessType.FIELD)
 @ApiModel(value = "order", description = "An order")
-public class Order implements Serializable{
-	private static final long serialVersionUID = 1234L;
-	
+public class OrderOrg {
+
+    @XmlElement
     @ApiModelProperty(name = "id", required = true, value = "The order id")
     private int id;
 
+    @XmlElement
     @ApiModelProperty(name = "partName", required = true, value = "The name of the item to order")
     private String partName;
 
+    @XmlElement
     @ApiModelProperty(name = "amount", required = true, value = "Number of items to order")
     private int amount;
 
+    @XmlElement
     @ApiModelProperty(name = "customerName", required = true, value = "The name of the customer")
     private String customerName;
 

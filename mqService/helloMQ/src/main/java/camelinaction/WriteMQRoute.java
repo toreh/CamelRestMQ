@@ -15,10 +15,12 @@ public class WriteMQRoute extends RouteBuilder {
         		// sannsynligvis pga JAXB annoteringer i Order.java. 
         		// Fjernet disse kommer som pojo
         		.log("=====>>>input message: ${body}")
+        		.to("log:?level=INFO&showBody=true")
         		// default seems to be req/reply, ie JmsReplyTo is set to temp-dest and and 
         		// if no msg is received upon a queue write 
         		// there will be a rollback and msg moved to ActiveMQ.DLQ
-        		.setExchangePattern(ExchangePattern.InOnly)
+        		.setExchangePattern(ExchangePattern.InOut)
+        		//.setExchangePattern(ExchangePattern.InOnly)
         		
         		// crashes
         		// JsonParseException: Unexpected character ('<' (code 60)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')
@@ -41,9 +43,12 @@ public class WriteMQRoute extends RouteBuilder {
         		// type conversion vs format conversion
         		// Camel has automatic type conversion
         		// JSON data format (pojo <-> json)
+        		// pojo -> json
         		.marshal().json(JsonLibrary.Jackson, Order.class)
         		.log("=====>>>write message to queue: ${body}")
+        		// bra logformat - gir også Exchange info!!!
                 .to("log:?level=INFO&showBody=true")
-                .to("activemq:queue:testQueue");
+                // bodytype = Byte[]
+                .to("activemq:queue:requestQueue?jmsMessageType=Text");
     }
 }
